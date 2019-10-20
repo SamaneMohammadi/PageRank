@@ -1,15 +1,14 @@
 # PageRank
-The power method for Ar = λr
-for k = 1, 2, . . . until convergence q(k) = Ar(k−1)
 
-r(k) = q(k)/∥ q(k) ∥
-
-The purpose of normalizing the vector (making it have 1-norm equal to 1) is to avoid having the vector become either very large or very small and thus unrep- resentable in the floating point system. We will see later that normalization is not necessary in the pagerank computation. In this context there is no need to compute an eigenvalue approximation, as the sought eigenvalue is known to be equal to one.
-
-The convergence of the power method depends on the distribution of eigen- values. To make the presentation simpler, we assume that A is diagonalizable, i.e., there exists a nonsingular matrix T of eigenvectors,
-T−1AT = diag(λ1,...,λn). The eigenvalues λi are ordered 1 = λ1 > |λ2| ≥ ··· ≥ |λn|. 
-Expand the initial approximation r(0) in terms of the eigenvectors,
-r(0) =c1t1 +c2t2 +···+cntn,
-where c1 ̸= 0 is assumed30 and r = t1 is the sought eigenvector.
-Then we have
-Akr(0) = c1Akt1 + c2Akt2 + · · · + cnAktn =c1λk1t1 +c2λk2t2 +···+cnλkntn
+In view of the huge dimensions of the Google matrix, it is nontrivial to compute
+the matrix-vector product y = Az, where A = αP + (1 − α) 1 eeT . Recall that P n
+was constructed from the actual link matrix Q as P = Q + 1 edT ,
+n
+where the row vector d has an element 1 in all those positions that correspond to Web pages with no outlinks (see (12.5)). This means that to form P, we insert a large number of full vectors into Q, each of the same dimension as the total number of Web pages. Consequently, we cannot afford to store P explicitly. Let us look at the multiplication y = Az in more detail:
+y=α Q+nedT z+ n e(eTz)=αQz+βne
+where:
+β = αdT z + (1 − α)eT z.
+We do not need to compute β from this equation. Instead we can use in
+       combination with:
+1 = eT (αQz) + βeT 1 e = eT (αQz) + β.
+Thus, we have β = 1−∥αQz∥1. An extra bonus is that we do not use the vector d at all, i.e., we need not know which pages lack outlinks.
